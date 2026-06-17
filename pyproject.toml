@@ -1,0 +1,12 @@
+[project]
+name = "movie-recommender"
+version = "0.1.0"
+description = "Semantic search engine for movies built with FastAPI and Qdrant."
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "qdrant-client==1.15.1",
+    "openai",
+    "toml",
+]
