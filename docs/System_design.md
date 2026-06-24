@@ -2,6 +2,7 @@
 
 **System Design Document** &nbsp;·&nbsp; *Work in progress*
 
+
 ---
 
 ## 1. Motivation
@@ -36,25 +37,25 @@ The Functional Guide Generator generates structured, readable documentation from
 
 ### 2.1 Layers
 
-| Layer | Label |
-| - | - |
-| 🔵 | Ingest & preprocess |
-| 🟢 | Retrieve & generate |
-| ⚪ | Evaluate & serve |
+| Layer | Label               |
+| ----- | ------------------- |
+| 🔵    | Ingest & preprocess |
+| 🟢    | Retrieve & generate |
+| ⚪    | Evaluate & serve    |
 
 ### 2.2 Component details
 
-| Component | Role | Technology | Layer |
-| - | - | - | - |
-| **Input Ingestion** | Fetch raw artifacts from source systems | REST / GitHub / Confluence APIs | Input |
-| **Preprocessing** | Clean, chunk, normalise text and images | LangChain splitters, Tesseract OCR | Input |
-| **Embedding Model** | Convert chunks to vectors or relational DB entries | text-embedding-3-small (OpenAI) | Input |
-| **Data Store** | Vector + relational storage | Qdrant · PostgreSQL | Retrieval |
-| **LLM** | Synthesise retrieved context into docs | TBD — open source preferred | Retrieval |
-| **Prompt Engine** | Manage templates, section targeting | LangChain LCEL | Retrieval |
-| **Evaluation Module** | Score grounding, coverage, readability | LLM-as-judge + ROUGE-L | Quality |
-| **API Layer** *(Later)* | Expose generate / status / feedback endpoints | FastAPI + uvicorn | Serving |
-| **UI** *(Later)* | Source selection, generation, review, export | React SPA (MVP: CLI / Jupyter) | Serving |
+| Component                       | Role                                               | Technology                         | Layer     |
+| ------------------------------- | -------------------------------------------------- | ---------------------------------- | --------- |
+| **Input Ingestion**       | Fetch raw artifacts from source systems            | REST / GitHub / Confluence APIs    | Input     |
+| **Preprocessing**         | Clean, chunk, normalise text and images            | LangChain splitters, Tesseract OCR | Input     |
+| **Embedding Model**       | Convert chunks to vectors or relational DB entries | text-embedding-3-small (OpenAI)    | Input     |
+| **Data Store**            | Vector + relational storage                        | Qdrant · PostgreSQL               | Retrieval |
+| **LLM**                   | Synthesise retrieved context into docs             | TBD — open source preferred       | Retrieval |
+| **Prompt Engine**         | Manage templates, section targeting                | LangChain LCEL                     | Retrieval |
+| **Evaluation Module**     | Score grounding, coverage, readability             | LLM-as-judge + ROUGE-L             | Quality   |
+| **API Layer** *(Later)* | Expose generate / status / feedback endpoints      | FastAPI + uvicorn                  | Serving   |
+| **UI** *(Later)*        | Source selection, generation, review, export       | React SPA (MVP: CLI / Jupyter)     | Serving   |
 
 > Not all components are required in the first iteration, nor mandatory for each pipeline.
 
@@ -164,14 +165,14 @@ Overview · Step-by-step guide · Business rules · FAQ · Glossary
 
 ## 4. Model & Tool Choices
 
-| Concern | Choice | Alternative |
-| - | - | - |
-| **Text generation** | TBD via LLM gateway (e.g. Tiny LLM) | GPT-4o |
-| **Embeddings** | text-embedding-3-small | Cohere Embed v3 |
-| **Vector store** | Qdrant | PGVector · FAISS |
-| **Relational DB** | PostgreSQL | — |
-| **OCR** *(Later)* | Claude Vision + Tesseract fallback | AWS Textract |
-| **Orchestration** | LangChain LCEL | LlamaIndex |
+| Concern                   | Choice                              | Alternative       |
+| ------------------------- | ----------------------------------- | ----------------- |
+| **Text generation** | TBD via LLM gateway (e.g. Tiny LLM) | GPT-4o            |
+| **Embeddings**      | text-embedding-3-small              | Cohere Embed v3   |
+| **Vector store**    | Qdrant                              | PGVector · FAISS |
+| **Relational DB**   | PostgreSQL                          | —                |
+| **OCR** *(Later)* | Claude Vision + Tesseract fallback  | AWS Textract      |
+| **Orchestration**   | LangChain LCEL                      | LlamaIndex        |
 
 ---
 
@@ -179,13 +180,13 @@ Overview · Step-by-step guide · Business rules · FAQ · Glossary
 
 Five dimensions at generation time, plus post-publish user feedback. Human review critical in early iterations.
 
-| Dimension | Method | When | Target | Tooling |
-| - | - | - | - | - |
-| **Factual grounding** | LLM-as-judge: every claim traceable to a chunk? | Sync | ≥ 90% sentences grounded | LLM rubric |
-| **Coverage** | % functional areas from source mentioned in output | Sync | ≥ 80% coverage | Keyword overlap |
-| **Lexical overlap** | ROUGE-L vs reference doc | Async | ≥ 0.35 ROUGE-L | rouge-score |
-| **Readability** | Flesch-Kincaid + LLM clarity score | Async | Grade 10–14; clarity ≥ 4/5 | textstat |
-| **User acceptance** | Thumbs-up/down + edit distance after export | Manual | ≥ 70% 👍 without major edits | UI widget |
+| Dimension                   | Method                                             | When   | Target                        | Tooling         |
+| --------------------------- | -------------------------------------------------- | ------ | ----------------------------- | --------------- |
+| **Factual grounding** | LLM-as-judge: every claim traceable to a chunk?    | Sync   | ≥ 90% sentences grounded     | LLM rubric      |
+| **Coverage**          | % functional areas from source mentioned in output | Sync   | ≥ 80% coverage               | Keyword overlap |
+| **Lexical overlap**   | ROUGE-L vs reference doc                           | Async  | ≥ 0.35 ROUGE-L               | rouge-score     |
+| **Readability**       | Flesch-Kincaid + LLM clarity score                 | Async  | Grade 10–14; clarity ≥ 4/5  | textstat        |
+| **User acceptance**   | Thumbs-up/down + edit distance after export        | Manual | ≥ 70% 👍 without major edits | UI widget       |
 
 ### Some quality questions
 
@@ -208,15 +209,15 @@ Five dimensions at generation time, plus post-publish user feedback. Human revie
 
 ## 6. Trade-offs & Limitations
 
-| Area | Limitation | Mitigation |
-| - | - | - |
-| **Source quality** | Garbage-in, garbage-out | Warn on low similarity scores |
-| **Real-time sync** | No auto re-ingestion on change | Manual re-index via API (v2) |
-| **Code understanding** | Indexed as text; no AST analysis | Acceptable for v1; deeper in v2 |
-| **Multilingual output** | Follows dominant source language | Language override param in v2 |
-| **Hallucination** | LLM may infer absent behaviour | Grounding check + human review |
-| **Access control** | No per-user permission model | OAuth connectors in v2 |
-| **Output format** | Markdown only; export is post-processing | Converters for all targets |
+| Area                          | Limitation                               | Mitigation                      |
+| ----------------------------- | ---------------------------------------- | ------------------------------- |
+| **Source quality**      | Garbage-in, garbage-out                  | Warn on low similarity scores   |
+| **Real-time sync**      | No auto re-ingestion on change           | Manual re-index via API (v2)    |
+| **Code understanding**  | Indexed as text; no AST analysis         | Acceptable for v1; deeper in v2 |
+| **Multilingual output** | Follows dominant source language         | Language override param in v2   |
+| **Hallucination**       | LLM may infer absent behaviour           | Grounding check + human review  |
+| **Access control**      | No per-user permission model             | OAuth connectors in v2          |
+| **Output format**       | Markdown only; export is post-processing | Converters for all targets      |
 
 ---
 
@@ -230,16 +231,19 @@ Five dimensions at generation time, plus post-publish user feedback. Human revie
 ### 7.2 Possible iterations
 
 **v2**
+
 - Automatic incremental re-indexing triggered by webhook (Jira, GitHub events)
 - AST-level code understanding to improve step-by-step guides for complex workflows
 - Per-user ACL on source connectors using OAuth 2.0 token delegation
 - Explicit output language selection (e.g. always generate in English)
 
 **v3**
+
 - Confluence / Word export via dedicated post-processing converters
 - More dynamic UI and output API
 
 **v4**
+
 - Extend audience to external stakeholders
 - Support pages for end-users; additional document types
 
