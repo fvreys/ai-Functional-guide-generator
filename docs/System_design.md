@@ -1,6 +1,6 @@
 # Functional Guide Generator
 
-**System Design Document** &nbsp;·&nbsp; *v7*
+**System Design Document** &nbsp;·&nbsp; *v7* 
 
 ---
 
@@ -41,15 +41,16 @@ The system is composed of the following possible logical components, grouped int
 
 ### 2.2 Component details
 
-| Component | Role | Technology / Service |
-| - | - | - |
-| **Input Ingestion** | Fetches raw artifacts from source systems (wiki, screenshots, Jira, GitHub) | Import of CSV data file; REST / GitHub / Confluence API, screen capture lib |
-| **Preprocessing** | Cleans, chunks, and normalises text and images before indexing | LangChain text splitters; SQL queries |
-| **Embedding Model** | Converts chunks into dense vectors for semantic search or into relational DB entries | text-embedding-3-small (OpenAI) — low cost |
-| **Data store** | Vector Store: stores and retrieves most relevant chunks for semantic search, supports metadata filtering | Qdrant |
-| **LLM** | Synthesis of retrieved context into structured functional documentation | Aim for: open source, strong summarization, long context window — compare and select model at last moment |
-| **Prompt Engine** | Manages prompt templates, document template with sections | LangChain LCEL chains with custom prompt templates |
-| **Evaluation Module** | Scores generated doc, if possible using a reference document; ends with manual verification | LLM-as-judge for different criteria; manual user feedback |
+
+| Component             | Role                                                                                                     | Technology / Service                                                                                       |
+| --------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| **Input Ingestion**   | Fetches raw artifacts from source systems (wiki, screenshots, Jira, GitHub)                              | Import of CSV data file; REST / GitHub / Confluence API, screen capture lib                                |
+| **Preprocessing**     | Cleans, chunks, and normalises text and images before indexing                                           | LangChain text splitters; SQL queries                                                                      |
+| **Embedding Model**   | Converts chunks into dense vectors for semantic search or into relational DB entries                     | text-embedding-3-small (OpenAI) — low cost                                                                |
+| **Data store**        | Vector Store: stores and retrieves most relevant chunks for semantic search, supports metadata filtering | Qdrant                                                                                                     |
+| **LLM**               | Synthesis of retrieved context into structured functional documentation                                  | Aim for: open source, strong summarization, long context window — compare and select model at last moment |
+| **Prompt Engine**     | Manages prompt templates, document template with sections                                                | LangChain LCEL chains with custom prompt templates                                                         |
+| **Evaluation Module** | Scores generated doc, if possible using a reference document; ends with manual verification              | LLM-as-judge for different criteria; manual user feedback                                                  |
 
 ---
 
@@ -173,13 +174,14 @@ We create a high-level overview of the software in max. 2–7 pages, covering ho
 
 ## 4. Model and Tool choices
 
-| Concern | Choice | Rationale | Alternative considered |
-| - | - | - | - |
-| **Text generation** | 'LLM to be chosen' | Decide model choice at last moment, comparing cost/result; access through LLM gateway (e.g. LiteLLM) | Claude Sonnet 4.6 — too costly · GPT-4o — comparable but higher latency on long contexts |
-| **Embeddings** | text-embedding-3-small | Good semantic quality at low cost; 1536-dim vectors | Cohere Embed v3 — better multilingual but higher cost |
-| **Vector store** | Qdrant | Similarity search; easy Docker deployment | PGVector — integration with Postgres |
-| **Orchestration** | LangChain LCEL | Composable chains; native Qdrant and OpenAI integrations | LlamaIndex — strong document handling but heavier abstraction |
-| **Evaluation & Monitoring** | Langfuse | Easy to use; standard evaluation & logging | — |
+
+| Concern                     | Choice                 | Rationale                                                                                            | Alternative considered                                                                      |
+| --------------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| **Text generation**         | 'LLM to be chosen'     | Decide model choice at last moment, comparing cost/result; access through LLM gateway (e.g. LiteLLM) | Claude Sonnet 4.6 — too costly · GPT-4o — comparable but higher latency on long contexts |
+| **Embeddings**              | text-embedding-3-small | Good semantic quality at low cost; 1536-dim vectors                                                  | Cohere Embed v3 — better multilingual but higher cost                                      |
+| **Vector store**            | Qdrant                 | Similarity search; easy Docker deployment                                                            | PGVector — integration with Postgres                                                       |
+| **Orchestration**           | LangChain LCEL         | Composable chains; native Qdrant and OpenAI integrations                                             | LlamaIndex — strong document handling but heavier abstraction                              |
+| **Evaluation & Monitoring** | Langfuse               | Easy to use; standard evaluation & logging                                                           | —                                                                                          |
 
 ---
 
@@ -192,15 +194,16 @@ Quality is assessed:
 
 > No single evaluation metric is sufficient. In first iterations, human review will probably be more important.
 
-| Parameter | Metric / Method | Target | Tooling |
-| - | - | - | - |
-| **Completeness** *(automated)* | Presence of all required document sections | 100% requested sections | Langfuse |
-| **Factual grounding** *(automated)* | LLM-as-judge: is every claim traceable to a retrieved chunk? | ≥ 90% of sentences grounded | Langfuse |
-| **Coverage** *(automated)* | % of functional areas in agile tickets mentioned in output | ≥ 80% coverage | Keyword extraction + overlap check |
-| **Lexical overlap** *(if reference doc)* | Similarity search vector DB vs. human-written reference | ≥ 70% similarity search | Embed similarity scores in vector DB |
-| **Readability** *(if reference doc)* | LLM clarity score | Clarity ≥ 4/5 | textstat + LLM rubric |
-| **User acceptance** *(manual)* | Manual reviewer classifies output | ≥ 60% OK | Manual annotation |
-| **Post-publishing user feedback** *(UI)* | Reviewer thumbs-up/down on final doc | ≥ 70% thumbs-up without major edits | UI feedback widget |
+
+| Parameter                                | Metric / Method                                              | Target                               | Tooling                              |
+| ---------------------------------------- | ------------------------------------------------------------ | ------------------------------------ | ------------------------------------ |
+| **Completeness** *(automated)*           | Presence of all required document sections                   | 100% requested sections              | Langfuse                             |
+| **Factual grounding** *(automated)*      | LLM-as-judge: is every claim traceable to a retrieved chunk? | ≥ 90% of sentences grounded         | Langfuse                             |
+| **Coverage** *(automated)*               | % of functional areas in agile tickets mentioned in output   | ≥ 80% coverage                      | Keyword extraction + overlap check   |
+| **Lexical overlap** *(if reference doc)* | Similarity search vector DB vs. human-written reference      | ≥ 70% similarity search             | Embed similarity scores in vector DB |
+| **Readability** *(if reference doc)*     | LLM clarity score                                            | Clarity ≥ 4/5                       | textstat + LLM rubric                |
+| **User acceptance** *(manual)*           | Manual reviewer classifies output                            | ≥ 60% OK                            | Manual annotation                    |
+| **Post-publishing user feedback** *(UI)* | Reviewer thumbs-up/down on final doc                         | ≥ 70% thumbs-up without major edits | UI feedback widget                   |
 
 ### 5.1 Evaluation Pipeline
 
@@ -221,14 +224,15 @@ Post-processing **user feedback** is collected from the UI and stored for period
 
 ## 6. Trade-offs and Limitations
 
-| Area | Limitation / Decision | Reason / Mitigation |
-| - | - | - |
-| **Source quality** | Garbage-in, garbage-out; poor tickets or vague specs yield shallow docs | Warn user when clean-up detects a lot of low-quality data, or retrieved chunks have low similarity scores; prompt for better sources |
-| **Hallucination** | LLM may infer behaviour not present in sources | Grounding check flags low-confidence sentences; human review step required before publish |
-| **Output format** | Generates Markdown; post-processing is export to Word, Confluence, etc. | Markdown is the most portable intermediate format; converters exist for target formats |
-| **Real-time sync** | No automatic re-ingestion when a ticket or code file changes | *Later*: manual re-index |
-| **Multilingual output** | Generation language follows the dominant language of sources | *Later*: explicit language override parameter planned |
-| **Access control** | No per-user permission model on source artifacts | *Later*: assumes operator controls which sources are connected |
+
+| Area                    | Limitation / Decision                                                   | Reason / Mitigation                                                                                                                  |
+| ----------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| **Source quality**      | Garbage-in, garbage-out; poor tickets or vague specs yield shallow docs | Warn user when clean-up detects a lot of low-quality data, or retrieved chunks have low similarity scores; prompt for better sources |
+| **Hallucination**       | LLM may infer behaviour not present in sources                          | Grounding check flags low-confidence sentences; human review step required before publish                                            |
+| **Output format**       | Generates Markdown; post-processing is export to Word, Confluence, etc. | Markdown is the most portable intermediate format; converters exist for target formats                                               |
+| **Real-time sync**      | No automatic re-ingestion when a ticket or code file changes            | *Later*: manual re-index                                                                                                             |
+| **Multilingual output** | Generation language follows the dominant language of sources            | *Later*: explicit language override parameter planned                                                                                |
+| **Access control**      | No per-user permission model on source artifacts                        | *Later*: assumes operator controls which sources are connected                                                                       |
 
 ---
 
@@ -244,17 +248,21 @@ Post-processing **user feedback** is collected from the UI and stored for period
 ### 7.2 Improvements — possible next iterations
 
 **v2**
+
 - Automatic incremental re-indexing triggered by webhook (Jira, GitHub events)
 - Access control: per-user ACL on source connectors using OAuth 2.0 token delegation
 
 **v3**
+
 - Access control: per-user ACL on source connectors using OAuth 2.0 token delegation
 - More dynamic (UI, output API)
 
 **v4**
+
 - Explicit output language selection (e.g. always generate in English regardless of source language)
 
 **v5**
+
 - Extend audience (e.g. to external stakeholders) — at start it will be primarily a functional description for internal company usage
 - Use other document types, e.g. to make 'support' pages for end-users
 

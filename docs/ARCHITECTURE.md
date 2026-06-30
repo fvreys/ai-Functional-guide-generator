@@ -1,6 +1,6 @@
 # Architecture
 
-For this architecture overview, check also the System design under chapter 3.
+For this architecture overview, check also the System design under chapter 3. 
 
 ```mermaid
 flowchart LR
