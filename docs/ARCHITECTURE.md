@@ -1,17 +1,17 @@
-For this architecture overview, check also the System design under chapter 3. 
-
 # Functional Guide Generator — Architecture Diagram
+
+---
 
 ## System Architecture
 
 ```mermaid
 flowchart LR
   subgraph SRC["Input sources"]
-    I1["Requirements &\nspecifications"]:::grey
-    I2["Features &\nuser stories"]:::blue
-    I3["Application\nscreenshots"]:::grey
-    I4["Demo meeting notes\n& recordings"]:::grey
-    I5["Code repository"]:::grey
+    I1["Requirements &<br/>specifications"]:::darkgrey
+    I2["Features &<br/>user stories"]:::blue
+    I3["Application<br/>screenshots"]:::darkgrey
+    I4["Demo meeting notes<br/>& recordings"]:::darkgrey
+    I5["Code repository"]:::darkgrey
   end
 
   subgraph L1["Layer 1 — Ingest & preprocess"]
@@ -29,7 +29,7 @@ flowchart LR
     C1[Evaluate]:::amber --> C2[Serve]:::amber
   end
 
-  MD["Markdown\n(default)"]:::green
+  MD["Markdown<br/>(default)"]:::green
 
   subgraph POST["Post-processing"]
     P1[Word]:::green
@@ -45,45 +45,53 @@ flowchart LR
   MD --> P1 & P2 & P3 & P4
 
   classDef blue  fill:#E6F1FB,stroke:#378ADD,color:#0C447C
-  classDef grey  fill:#F5F5F5,stroke:#999999,color:#666666
+  classDef darkgrey fill:#D3D3D3,stroke:#666666,color:#333333
   classDef amber fill:#FAEEDA,stroke:#BA7517,color:#633806
   classDef green fill:#EAF3DE,stroke:#639922,color:#27500A
 ```
+
+---
 
 ## Architecture Overview
 
 ### Input Sources
 
-**Primary input source (active):**
-- **Features & user stories** — Agile board items (Jira, Azure DevOps)
+**Currently Active** (Blue):
+- **Features & user stories** — agile board items (Jira, Azure DevOps)
 
-**Future input sources (greyed out):**
-- Requirements & specifications (wiki, documents, product backlog)
+**Future Input Sources** (Grey):
+- Requirements & specifications (Wiki, Confluence, Notion)
 - Application screenshots
 - Demo meeting notes & recordings
-- Code repository (GitHub, etc.)
+- Code repository (GitHub)
 
 ### Processing Layers
 
-1. **Layer 1 — Ingest & Preprocess**
-   - Ingest: fetch raw artifacts from source systems
-   - Preprocess: clean, validate, and chunk text
-   - Embed & store: convert chunks to vectors and store with metadata
+**Layer 1 — Ingest & preprocess**
+- Ingest: Extract raw artifacts from source systems
+- Preprocess: Clean, chunk, and normalize text/images
+- Embed & store: Convert chunks to vectors and store in vector database
 
-2. **Layer 2 — Retrieve & Generate**
-   - Retrieve: semantic search to fetch relevant chunks
-   - Generate: LLM synthesis into functional documentation
+**Layer 2 — Retrieve & generate**
+- Retrieve: Fetch relevant chunks from vector store via semantic search
+- Generate: Use LLM to synthesize context into functional documentation
 
-3. **Layer 3 — Evaluate & Serve**
-   - Evaluate: quality scoring via LLM-as-judge and manual review
-   - Serve: deliver final documentation
+**Layer 3 — Evaluate & serve**
+- Evaluate: Score quality using multiple criteria (completeness, precision, recall)
+- Serve: Return assembled documentation to user
 
 ### Output Formats
 
-**Default:** Markdown
+**Default Output**:
+- Markdown
 
-**Post-processing options:**
-- Word
+**Post-processing to**:
+- Word document
 - PDF
 - HTML
 - Wiki page
+
+---
+
+*This architecture diagram is part of the Functional Guide Generator System Design.*  
+*Licensed under CC BY 4.0 — [http://creativecommons.org/licenses/by/4.0/](http://creativecommons.org/licenses/by/4.0/)*

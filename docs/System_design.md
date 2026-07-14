@@ -1,6 +1,38 @@
 # Functional Guide Generator
 
-**System Design Document**    *v8*
+**System Design Document** · *v9*
+
+---
+
+## Table of Contents
+
+1. [Motivation](#motivation)
+   - [Problem statement](#problem-statement)
+   - [Solution](#solution)
+   - [Restrictions](#restrictions)
+   - [Prerequisite for implementation](#prerequisite-for-implementation)
+
+2. [System Components](#system-components)
+   - [Layers](#layers)
+   - [Component details](#component-details)
+
+3. [Data Flow](#data-flow)
+   - [Ingestion & Preprocessing](#ingestion--preprocessing-offline--on-demand)
+   - [Retrieval, Generation & Evaluation](#retrieval-generation--evaluation-online--per-request)
+
+4. [Model and Tool Choices](#model-and-tool-choices)
+
+5. [Evaluation Strategy](#evaluation-strategy)
+   - [Evaluation Pipeline](#evaluation-pipeline)
+   - [Key Evaluation Questions](#key-evaluation-questions)
+
+6. [Trade-offs and Limitations](#trade-offs-and-limitations)
+
+7. [Ideas to Improve Overall Quality](#ideas-to-improve-overall-quality)
+
+8. [Next Steps / Iterations](#next-steps--iterations)
+   - [First Implementation Steps](#first-implementation-steps)
+   - [Incremental Improvements](#incremental-improvements--possible-next-iterations)
 
 ---
 
@@ -12,14 +44,14 @@ Writing functional documentation after the implementation of a software feature 
 
 ### 1.2 Solution
 
-The Functional Guide Generator aims to generate structured, meaningful and readable functional documentation based on available information sources, written for persons (not for documentation agents).
+The Functional Guide Generator aims to generate structured, meaningful, and readable functional documentation based on available information sources, written for persons (not for documentation agents).
 
 ### 1.3 Restrictions
 
 - No new information is created. The system assembles and rephrases what is already implicitly known.
 - Information will not be updated in real time, nor will we have automated interfaces for input of information.
-- Documentation is only in English
-- We exclude creation of technical documentation
+- Documentation is only in English.
+- We exclude creation of technical documentation.
 
 > These restrictions may be lifted in future iterations.
 
@@ -55,13 +87,15 @@ The system is composed of the following possible logical components, grouped int
 
 ## 3. Data Flow
 
+### Architecture Diagram
+
 ```mermaid
 flowchart LR
   subgraph SRC["Input sources"]
-    I1["Requirements &\nspecifications"]:::darkgrey
-    I2["Features &\nuser stories"]:::blue
-    I3["Application\nscreenshots"]:::darkgrey
-    I4["Demo meeting notes\n& recordings"]:::darkgrey
+    I1["Requirements &<br/>specifications"]:::darkgrey
+    I2["Features &<br/>user stories"]:::blue
+    I3["Application<br/>screenshots"]:::darkgrey
+    I4["Demo meeting notes<br/>& recordings"]:::darkgrey
     I5["Code repository"]:::darkgrey
   end
 
@@ -80,7 +114,7 @@ flowchart LR
     C1[Evaluate]:::amber --> C2[Serve]:::amber
   end
 
-  MD["Markdown\n(default)"]:::green
+  MD["Markdown<br/>(default)"]:::green
 
   subgraph POST["Post-processing"]
     P1[Word]:::green
@@ -101,7 +135,7 @@ flowchart LR
   classDef green fill:#EAF3DE,stroke:#639922,color:#27500A
 ```
 
-The diagram contains the following information:
+### Data Flow Description
 
 **Input sources — general**
 
@@ -111,7 +145,7 @@ The diagram contains the following information:
 4. Demo meeting notes & recordings
 5. Code repository (e.g. GitHub)
 
-In practise this can be:
+In practice this can be:
 
 - Requirements and specifications from wiki — Confluence, Notion, documents
 - Agile board with features and user stories (Jira, Azure DevOps)
@@ -174,7 +208,7 @@ We create a high-level overview of the software in max. 2–7 pages, covering ho
 
 ---
 
-## 4. Model and Tool choices
+## 4. Model and Tool Choices
 
 | Concern | Choice | Rationale | Alternative considered |
 | - | - | - | - |
@@ -184,7 +218,7 @@ We create a high-level overview of the software in max. 2–7 pages, covering ho
 | **Orchestration** | LangChain LCEL | Composable chains; native Qdrant and OpenAI integrations | LlamaIndex — strong document handling but heavier abstraction |
 | **Evaluation & Monitoring** | Langfuse | Easy to use; standard evaluation & logging | — |
 
-**Alternatives for data store**
+### Alternatives for data store
 
 We will use as input source a CSV file with agile board items (Jira CSV, Azure DevOps CSV with user stories, features, etc.) for a specific epic or 'application' functionality.
 
@@ -224,15 +258,22 @@ Quality is assessed:
 
 Post-processing **user feedback** is collected from the UI and stored for periodic fine-tuning.
 
-#### We try also to answer these questions
+### 5.2 Key Evaluation Questions
+
+We try also to answer these questions:
 
 - Do we have consistent terminology? Do we consistently use the same term for every concept?
   - This could be a kind of 'automatic term extraction'
   - Create embeddings (per 'term' or 'concept')
   - Cluster the embeddings to understand whether they refer to the same concept
+
 - Is our glossary of terms complete? Criterium to add a 'concept' to the glossary: A concept is used for the first time and we have a definition for it.
+
 - We define the quality of functional documentation as documentation which is actually used or read. Unfortunately this is difficult to measure 'before' availability of the documentation — we will use quality metrics as above.
+
 - What to do with other agile item types (bug, task, etc.)?
+
+- What is the actual 'cost' to create a meaningful result?
 
 ---
 
@@ -245,13 +286,13 @@ Post-processing **user feedback** is collected from the UI and stored for period
 | **Output format** | Generates Markdown; post-processing is export to Word, Confluence, etc. | Markdown is the most portable intermediate format; converters exist for target formats |
 | **Cost** | Multiple LLM calls can become costly; balance cost with quality e.g. for evaluation | Use small LLMs for specific tasks; assess cost of different automatic evaluations |
 | **Context window size** | 1. Keep it small. 2. Do section-by-section generation | Context window size should not be bigger than needed to generate a document of 2–6 pages; hallucinations tend to increase with document length; section-by-section generation works better with explicit outline pass before generation actually takes place |
-| **Real-time sync** | No automatic re-ingestion when a ticket or code file changes | *Later*: manual re-index |
-| **Multilingual output** | Generation language follows the dominant language of sources | *Later*: explicit language override parameter planned |
-| **Access control** | No per-user permission model on source artifacts | *Later*: assumes operator controls which sources are connected |
+| <span style="background-color: #D3D3D3;">**Real-time sync**</span> | <span style="background-color: #D3D3D3;">No automatic re-ingestion when a ticket or code file changes</span> | <span style="background-color: #D3D3D3;">*Later*: manual re-index</span> |
+| <span style="background-color: #D3D3D3;">**Multilingual output**</span> | <span style="background-color: #D3D3D3;">Generation language follows the dominant language of sources</span> | <span style="background-color: #D3D3D3;">*Later*: explicit language override parameter planned</span> |
+| <span style="background-color: #D3D3D3;">**Access control**</span> | <span style="background-color: #D3D3D3;">No per-user permission model on source artifacts</span> | <span style="background-color: #D3D3D3;">*Later*: assumes operator controls which sources are connected</span> |
 
 ---
 
-## 7. Ideas to improve the overall quality
+## 7. Ideas to Improve Overall Quality
 
 The solution can only work if you have at least one input source with quality information. When using agile board items as the input data source:
 
@@ -267,9 +308,9 @@ The solution can only work if you have at least one input source with quality in
 
 ---
 
-## 8. Next steps / Iterations
+## 8. Next Steps / Iterations
 
-### 8.1 First implementation steps
+### 8.1 First Implementation Steps
 
 **v0**
 
@@ -282,8 +323,9 @@ The solution can only work if you have at least one input source with quality in
 - Start with one input source for which we expect to have rather high-quality input, i.e. agile backlog items (user stories, features)
 - For this input, create the data pipeline
 - Start with 1 or 2 automated evaluations
+- Add logging of cost to get a first idea which components will generate most cost
 
-### 8.2 Incremental improvements — possible next iterations
+### 8.2 Incremental Improvements — Possible Next Iterations
 
 **v2**
 
@@ -307,13 +349,7 @@ The solution can only work if you have at least one input source with quality in
 
 ---
 
-## Annex — Questions
+*This work is licensed under the Creative Commons Attribution 4.0 International License.*  
+*To view a copy of this license, visit [http://creativecommons.org/licenses/by/4.0/](http://creativecommons.org/licenses/by/4.0/)*
 
-- Context window size — Section-by-section generation tends to work better with an explicit outline pass before generation actually takes place: What does this 'explicit outline pass' mean?
-
----
-
-## Annex — To Do
-
-- Include in doc findings of sprint
-- Use a subset of the above for demo
+**Document**: Functional_guide_generator System_design v9.md | **License**: CC BY 4.0 | **Date**: 2026-07-14
