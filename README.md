@@ -20,7 +20,9 @@ ai-eng-project-template/
 ├── .env.example                 # Environment variables template
 ├── docs/
 │   ├── ARCHITECTURE.md          # Architecture write-up template
-│   └── SUBMISSION_CHECKLIST.md  # Checklist to run through before submitting
+│   ├── license.md               # License
+│   ├── SUBMISSION_CHECKLIST.md  # Checklist to run through before submitting
+│   └── SUBMISSION_CHECKLIST.md  # System design
 ├── src/
 │   └── app/
 │       ├── __init__.py
@@ -31,87 +33,28 @@ ai-eng-project-template/
 └── data/                        # Sample data
 ```
 
-The application is a simple semantic search engine for movies. It can add movies into the collection and perform semantic search through the existing database. Treat it as a worked example of the intended pattern (FastAPI + Qdrant + an LLM provider) — replace the movie-specific schemas, services, and routes with your own graduation project's domain logic while keeping the same project structure.
+# Design for a functional guide generator
+This design contains:
+1. System design
+2. Architecture
 
-## Setup instructions
-### Prerequisites
+#  Overview of the application
+## 1.1 Problem statement
 
-Before running this project, make sure you have the following installed:
+Writing functional documentation after the implementation of a software feature is rarely done in practice. Developers start working on next tickets, product owners focus on acceptance or the next backlog item — the acquired knowledge embedded in tickets, code, wikis, and demos never makes it into a more functional-oriented manual.
 
-- **Docker Engine** - [Installation Guide](https://docs.docker.com/get-docker/)
-- **Docker Compose** - [Installation Guide](https://docs.docker.com/compose/install/)
+## 1.2 Solution
 
-> **Note**: If you're using Docker Desktop, Docker Compose is included automatically.
+The Functional Guide Generator aims to generate structured, meaningful, and readable functional documentation based on available information sources, written for persons (not for documentation agents).
 
-### Verify Installation
-```bash
-docker --version
-docker compose version 
-``` 
-### Setup steps   
-1. Clone the repository:    
-```bash
-git clone https://github.com/hyperskill-content/ai-eng-project-template
-```
-2. Navigate to the project directory:
-```bash
-cd ai-eng-project-template
-```
-3. Copy the sample `.env` file and fill it with the required credentials:
-```bash
-cp .env.example .env
-# Add your OpenAI API key to .env
-```
-4. Build the Docker images and start all services (first time build):
-```bash
-docker compose up --build
-```   
-or 
-```bash
-docker compose up
-```
-to start the existing pre-built containers.     
-5. Go to http://127.0.0.1:8000/docs to interact with the endpoints.
+## 1.3 Restrictions
 
-To stop the services and remove volumes (if needed), run  
-```bash
-docker compose down
-# or docker compose down -v to remove the created volumes
-```
+- No new information is created. The system assembles and rephrases what is already known and documented.
+- Information will not be updated in real time, nor will we have automated interfaces for input of information.
+- Documentation is only in English.
+- We exclude creation of technical documentation.
 
-### Local development without Docker (optional)
 
-Dependencies are managed with [uv](https://docs.astral.sh/uv/), and `uv.lock` pins exact versions so everyone (and CI) resolves the same environment. This is handy for IDE autocompletion, type checking, or running scripts directly, but Docker Compose remains the source of truth for running and submitting the project.
+## 1.4 Prerequisite for implementation
 
-1. [Install uv](https://docs.astral.sh/uv/getting-started/installation/).
-2. Install the locked dependencies into a local virtual environment:
-```bash
-uv sync
-```
-3. Start Qdrant (the app still needs an instance to talk to; this reuses the same image, port mapping, and storage volume defined in `docker-compose.yml`):
-```bash
-docker compose up -d qdrant
-```
-4. Run the app. It's running directly on your machine now, not on the Docker Compose network, so `QDRANT_HOST=qdrant` (the in-network hostname) won't resolve — point it at the host-exposed port from `docker-compose.yml` instead:
-```bash
-QDRANT_HOST=localhost QDRANT_PORT=6343 uv run uvicorn src.app.main:app --reload
-```
-5. Add a new dependency:
-```bash
-uv add <package-name>
-```
-
-## Application description and architecture 
-Explanations of features, detected areas for improvement, product development plan, and system design of the app should be described in [ARCHITECTURE.md](docs/ARCHITECTURE.md) file.
-
-## Before you submit
-Run through the [Submission Checklist](docs/SUBMISSION_CHECKLIST.md) before turning in your project.
-
-## Useful documentation
-- [Docker](https://docs.docker.com/) / [Docker Compose](https://docs.docker.com/compose/)
-- [uv](https://docs.astral.sh/uv/) — Python dependency & environment management
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [Pydantic](https://docs.pydantic.dev/)
-- [Qdrant](https://qdrant.tech/documentation/)
-- [OpenAI API](https://platform.openai.com/docs)
-- [The Twelve-Factor App](https://12factor.net/) — good practices for config, env vars, and dependencies
+> Minimal one of the input data streams should contain enough quality information to avoid creating a 'garbage in, garbage out' solution.
