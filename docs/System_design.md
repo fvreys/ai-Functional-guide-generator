@@ -385,5 +385,6 @@ The solution can only work if you have at least one input source with quality in
 
 *This work is licensed under the Creative Commons Attribution 4.0 International License.*  
 *To view a copy of this license, visit [http://creativecommons.org/licenses/by/4.0/](http://creativecommons.org/licenses/by/4.0/)*
+*Author: F.Vreys  (July 2026)*
 
 **Document**: Functional_guide_generator System_design v10.md | **License**: CC BY 4.0 | **Date**: 2026-07-15
