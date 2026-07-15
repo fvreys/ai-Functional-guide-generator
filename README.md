@@ -58,3 +58,6 @@ The Functional Guide Generator aims to generate structured, meaningful, and read
 ## 1.4 Prerequisite for implementation
 
 > Minimal one of the input data streams should contain enough quality information to avoid creating a 'garbage in, garbage out' solution.
+
+#  Other documents
+The implementation related files (code, env,..) have not been updated.
