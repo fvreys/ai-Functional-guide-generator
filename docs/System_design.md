@@ -1,6 +1,6 @@
 # Functional Guide Generator
 
-**System Design Document** · *v9*
+**System Design Document** · *v10*
 
 ---
 
@@ -23,6 +23,7 @@
 4. [Model and Tool Choices](#model-and-tool-choices)
 
 5. [Evaluation Strategy](#evaluation-strategy)
+   - [Evaluation metrics](#evaluation-metrics)
    - [Evaluation Pipeline](#evaluation-pipeline)
    - [Key Evaluation Questions](#key-evaluation-questions)
 
@@ -30,7 +31,9 @@
 
 7. [Ideas to Improve Overall Quality](#ideas-to-improve-overall-quality)
 
-8. [Next Steps / Iterations](#next-steps--iterations)
+8. [Biggest Challenges](#biggest-challenges)
+
+9. [ANNEX – Next Steps / Iterations](#annex--next-steps--iterations)
    - [First Implementation Steps](#first-implementation-steps)
    - [Incremental Improvements](#incremental-improvements--possible-next-iterations)
 
@@ -48,7 +51,7 @@ The Functional Guide Generator aims to generate structured, meaningful, and read
 
 ### 1.3 Restrictions
 
-- No new information is created. The system assembles and rephrases what is already implicitly known.
+- No new information is created. The system assembles and rephrases what is already known and documented.
 - Information will not be updated in real time, nor will we have automated interfaces for input of information.
 - Documentation is only in English.
 - We exclude creation of technical documentation.
@@ -57,7 +60,7 @@ The Functional Guide Generator aims to generate structured, meaningful, and read
 
 ### 1.4 Prerequisite for implementation
 
-> Minimal one of the input data streams should contain quality information to avoid creating a 'garbage in, garbage out' solution.
+> Minimal one of the input data streams should contain enough quality information to avoid creating a 'garbage in, garbage out' solution.
 
 ---
 
@@ -67,21 +70,21 @@ The Functional Guide Generator aims to generate structured, meaningful, and read
 
 The system is composed of the following possible logical components, grouped into three layers:
 
-- **Ingest & preprocess**: input ingestion, preprocess, embed
-- **Retrieve & generate**: data store, LLM
-- **Evaluate & serve**: prompt engine, evaluation model, API layer, UI
+- **Ingest & preprocess**: input ingestion, preprocessing, embed
+- **Retrieve & generate**: data store, prompt engine, LLM
+- **Evaluate & serve**: evaluation model, API layer, UI
 
 ### 2.2 Component details
 
-| Component | Role | Technology / Service |
-| - | - | - |
-| **Input Ingestion** | Fetches raw artifacts from source systems (wiki, screenshots, Jira, GitHub) | Import of CSV data file; REST / GitHub / Confluence API, screen capture lib |
-| **Preprocessing** | Cleans, chunks, and normalises text and images before indexing | LangChain text splitters; SQL queries |
-| **Embedding Model** | Converts chunks into dense vectors for semantic search or into relational DB entries | text-embedding-3-small (OpenAI) — low cost |
-| **Data store** | Vector Store: stores and retrieves most relevant chunks for semantic search, supports metadata filtering | Qdrant |
-| **LLM** | Synthesis of retrieved context into structured functional documentation | Aim for: open source, strong summarization, long context window — compare and select model at last moment |
-| **Prompt Engine** | Manages prompt templates, document template with sections | LangChain LCEL chains with custom prompt templates |
-| **Evaluation Module** | Scores generated doc, if possible using a reference document; ends with manual verification | LLM-as-judge for different criteria; manual user feedback |
+| Component | Type | Role | Technology / Service |
+| - | - | - | - |
+| **Input Ingestion** | Connector layer | Fetches raw artifacts from source systems (wiki, screenshots, board, code repo, ..) | 1) import CSV data file 2) REST / GitHub / Confluence API, screen capture library |
+| **Preprocessing** | Data pipeline | Cleans, chunks, and normalises text and images before indexing | LangChain text splitters; SQL queries |
+| **Embedding Model** | ML model | Converts chunks into dense vectors for semantic search or into relational DB entries | text-embedding-3-small (OpenAI) — low cost |
+| **Data store** | Retrieval layer | Stores and retrieves most relevant chunks for semantic search, with additional info in metadata | Qdrant or: Postgres & PGVector |
+| **Prompt Engine** | Orchestration | Manages prompt templates, document template with sections & a template per section (also used during evaluation) | LangChain LCEL chains with custom prompt templates |
+| **LLM** | Generation model | Synthesis of retrieved context into structured functional documentation | Aim for: open source, strong summarization — compare and select model at last moment |
+| **Evaluation Module** | Quality gate | Scores generated doc, if possible using a reference document; ends with manual verification | LLM-as-judge for different criteria; manual user feedback |
 
 ---
 
@@ -139,11 +142,11 @@ flowchart LR
 
 **Input sources — general**
 
-1. Requirements and specifications (e.g. company wiki, documents, features on product backlog)
-2. Features & user stories (on agile board — for developers)
+1. Requirements and specifications
+2. Agile board
 3. Application screenshots
 4. Demo meeting notes & recordings
-5. Code repository (e.g. GitHub)
+5. Code repository
 
 In practice this can be:
 
@@ -153,8 +156,6 @@ In practice this can be:
 - AI-generated meeting notes, recording
 - Code repository (GitHub repo)
 
-**Note on input sources**: Only the "Features & user stories" (Agile board) is currently used as an input source. The other four input sources (Requirements & specifications, Application screenshots, Demo meeting notes & recordings, Code repository) have a darker grey background to indicate they are not yet integrated.
-
 **Operations**
 
 - Ingest & preprocess
@@ -163,6 +164,9 @@ In practice this can be:
 
 **Output sections**
 
+List of chapters in the output document:
+
+- Content
 - Overview
 - Step-by-step guide
 - Business rules
@@ -185,24 +189,31 @@ We create a high-level overview of the software in max. 2–7 pages, covering ho
 - Read the input from a CSV file from the agile board for the application (Jira, Azure DevOps)
 - Preprocessing pipeline:
   - cleans text, validates the input data (e.g. checks if all data is filled in)
-  - *optional*: validates if a template is used in the description (of user story, etc.)
-  - chunks documents into 400–600 token segments
-  - a document contains only stories belonging to one feature
-  - a user story is not split over multiple chunks
-  - every chunk contains only items of one agile type (e.g. story, feature)
+  - *optional*: validate also the agile item description (of user story, etc.)
+  - Rules for chunking:
+    - chunks documents into 400–600 token segments
+    - a chunked document contains only stories belonging to one feature
+    - a user story is not split over multiple chunks
+    - every chunk contains only items of one agile item type (e.g. story, feature)
   - vector store holds only title and free-text fields (description, acceptance criteria)
-  - metadata holds only the additional relevant agile data (source type, date created, agile board ID, parent feature/epic ID of story, related stories with type relation)
+  - metadata holds only the relevant agile data (source type, date created, agile board ID, parent feature/epic ID of story, related stories with type relation)
 - Each chunk is encoded by the Embedding Model into a vector and stored in the Vector Store alongside its metadata.
 
 ### 3.2 Retrieval, Generation & Evaluation (online / per request)
 
-- Configuration is done manually for the target feature and the output sections to generate.
+- Configuration is done manually for:
+  - the target output
+  - the output sections to generate for the target, with a template per output section
 - The input request is passed to the Prompt Engine.
-- The Prompt Engine formulates a retrieval query for each target output section:
+- The Prompt Engine formulates:
+  - a retrieval query for each target output section of the output document
   - assesses query improvements (e.g. query decomposition, context scoring by feature/functionality, category — front end / back end / other)
-  - fetches the top-k relevant chunks from the vector store via semantic or similarity search
-- Retrieved chunks plus a structured prompt template are forwarded to the LLM, which writes the output in plain language.
-- Each generated section is passed to the Evaluation Module, which scores the defined criteria. Sections below a threshold are flagged for review.
+  - fetches the top-k relevant chunks via semantic or similarity search
+- Retrieved chunks plus a structured prompt template are forwarded to the LLM, which generates and writes the output in plain language.
+- Each generated output section is passed to the Evaluation Module:
+  - the module scores or evaluates it on the defined criteria
+  - sections below a threshold are flagged for review
+  - an **outline pass** is done to check that every section fits the overall document structure, before the complete document is generated
 - A human evaluation is done at the end.
 - The assembled document is returned in markdown file format; through post-processing, other output types can be created: Word, PDF, HTML, wiki page.
 
@@ -212,21 +223,22 @@ We create a high-level overview of the software in max. 2–7 pages, covering ho
 
 | Concern | Choice | Rationale | Alternative considered |
 | - | - | - | - |
-| **Text generation** | 'LLM to be chosen' | Decide model choice at last moment, comparing cost/result; access through LLM gateway (e.g. LiteLLM) | Claude Sonnet 4.6 — too costly · GPT-4o — comparable but higher latency on long contexts |
-| **Embeddings** | text-embedding-3-small | Good semantic quality at low cost; 1536-dim vectors | Cohere Embed v3 — better multilingual but higher cost |
-| **Vector store** | Qdrant | Similarity search; easy Docker deployment | PGVector — integration with Postgres |
+| **Text generation** | 'LLM to be chosen' | Decide model choice at last moment, comparing model (cost, result) | Criteria: not too costly, decent quality |
+| **Embeddings** | text-embedding-3-small | Good semantic quality at low cost; 1536-dim vectors | Cohere Embed v3 — higher cost, good multilingual |
+| **Data store** | Qdrant | Similarity search | Postgres with PGVector — to store relational data separately |
 | **Orchestration** | LangChain LCEL | Composable chains; native Qdrant and OpenAI integrations | LlamaIndex — strong document handling but heavier abstraction |
-| **Evaluation & Monitoring** | Langfuse | Easy to use; standard evaluation & logging | — |
+| **Evaluation & Monitoring** | Langfuse | Prompt versioning, Ragas integration, standard evaluation & logging | LangSmith, Portkey |
 
 ### Alternatives for data store
 
-We will use as input source a CSV file with agile board items (Jira CSV, Azure DevOps CSV with user stories, features, etc.) for a specific epic or 'application' functionality.
+We will use as input source a CSV file with agile board items — i.e. Jira CSV, Azure DevOps CSV with user stories, features, etc. (for a specific epic or 'application' functionality).
 
-- These CSV files contain individual fields, most with a specific restrictive data type. Some fields will have a free-format text field, e.g. 'description' and 'acceptance criteria'. 'description' will contain clarifying information about the backlog item.
-
-- For data storage we can decide between two options, based on initial status:
-  - Vector store with other required agile fields as metadata — probably better to be able to relate similarities
-  - If it's not many GBs of data, Postgres + PGVector combo can be used for more traditional relational querying and the ability to do vector search. If the original data is already in Postgres, this is even more an option.
+- These CSV files contain individual fields:
+  - most fields with a specific, restrictive data type
+  - some fields with a free-format text field, e.g. 'description' and 'acceptance criteria'
+- For the data storage we can choose between the two options below, taking into account our situation at the start:
+  - **Vector store**, with other required agile fields (from the agile board) as metadata — better to relate similarities
+  - **Postgres + PGVector** combo for more traditional relational querying with the ability to do vector search — easier if it is not many GBs of data; easier if the original data (CSV) is already in a Postgres database
 
 ---
 
@@ -234,46 +246,51 @@ We will use as input source a CSV file with agile board items (Jira CSV, Azure D
 
 Quality is assessed:
 
-- automatically through LLM-as-a-judge, using standard evaluation metrics
-- manually through human review and via post-publish user feedback
+- *automatically* through LLM-as-a-judge, using standard evaluation metrics
+- *manually* through human review and via post-publish user feedback
 
-> No single evaluation metric is sufficient. In first iterations, human review will probably be more important.
+### 5.1 Evaluation metrics
+
+- No single evaluation metric is sufficient.
+- We should clearly assess the cost of the different automatic evaluations used.
+- In first iterations, human review will probably be very important, to fine-tune the evaluation.
 
 | Parameter | Metric / Method | Target | Tooling |
 | - | - | - | - |
-| **Completeness** *(automated)* | Presence of all required document sections; per section template structure & content used | 100% requested sections; 80% requested templates | Langfuse; Similarity search |
+| **Completeness** *(automated)* | Presence of required document sections; per section, its template structure & content used | 100% requested sections; 80% requested templates | Langfuse with Ragas; Similarity search |
 | **Precision** *(automated)* | Precision = Claims in response that ARE supported by context / Total claims in response. Is every claim traceable to a retrieved chunk? | ≥ 90% precision (Accuracy of the retrieved context) | Langfuse with Ragas |
 | **Context recall** *(automated)* | Context recall = Relevant facts in context that appear in response / Total relevant facts in context | ≥ 85% context recall (Ability to retrieve all relevant information) | Langfuse with Ragas |
 | **Coverage** *(automated)* | % of functional areas in agile tickets mentioned in output | ≥ 80% coverage | Keyword extraction + overlap check |
 | **Lexical overlap** *(if reference doc)* | Similarity search vector DB vs. human-written reference (where available) | ≥ 90% similarity search *Concern*: pure semantic similarity here is not informative | vector DB |
-| **Readability** *(if reference doc)* | LLM clarity score | Clarity ≥ 4/5 | textstat + LLM rubric |
-| **User acceptance** *(manual)* | Manual reviewer classifies output | ≥ 60% OK | Manual annotation |
+| **Readability** *(if reference doc)* | LLM clarity score | Clarity ≥ 80% | textstat + LLM rubric |
+| **User acceptance** *(manual)* | Manual reviewer classifies output | ≥ 60% | Manual annotation |
 | **Post-publishing user feedback** *(UI)* | Reviewer thumbs-up/down on final doc | ≥ 70% thumbs-up without major edits | UI feedback widget |
 
-### 5.1 Evaluation Pipeline
+### 5.2 Evaluation Pipeline
 
 - Automated checks using LLM-as-a-judge run synchronously for **completeness**, **precision**, **context recall**, and **coverage**.
 - A reference document is required for **lexical overlap** and **readability scores**. These run asynchronously when a reference is available.
-- **User acceptance** is manual.
+- Manual **user acceptance**.
+- For all metrics: to assess whether we get meaningful results.
 
 Post-processing **user feedback** is collected from the UI and stored for periodic fine-tuning.
 
-### 5.2 Key Evaluation Questions
+### 5.3 Key Evaluation Questions
 
 We try also to answer these questions:
 
 - Do we have consistent terminology? Do we consistently use the same term for every concept?
   - This could be a kind of 'automatic term extraction'
-  - Create embeddings (per 'term' or 'concept')
-  - Cluster the embeddings to understand whether they refer to the same concept
+    - Create embeddings (per 'term' or 'concept')
+    - Cluster the embeddings to understand whether they refer to the same concept
 
 - Is our glossary of terms complete? Criterium to add a 'concept' to the glossary: A concept is used for the first time and we have a definition for it.
 
-- We define the quality of functional documentation as documentation which is actually used or read. Unfortunately this is difficult to measure 'before' availability of the documentation — we will use quality metrics as above.
+- We define the quality of functional documentation as documentation which is actually used or read. Unfortunately this is difficult to measure 'before' availability of the documentation — we will use the quality metrics above and refine them further after manual review.
 
 - What to do with other agile item types (bug, task, etc.)?
 
-- What is the actual 'cost' to create a meaningful result?
+- What is the actual 'cost' to create a meaningful result which is really used?
 
 ---
 
@@ -282,13 +299,21 @@ We try also to answer these questions:
 | Area | Limitation / Decision | Reason / Mitigation |
 | - | - | - |
 | **Source quality** | Garbage-in, garbage-out; poor tickets or vague specs yield shallow docs | Warn user when clean-up detects a lot of low-quality data, or retrieved chunks have low similarity scores; prompt for better sources |
-| **Hallucination** | LLM may infer behaviour not present in sources | Grounding check flags low-confidence sentences; human review step required before publish |
+| **Hallucination** | LLM may infer behaviour not present in sources | Precision/context recall checks flag low-confidence sentences; human review step required before publish |
 | **Output format** | Generates Markdown; post-processing is export to Word, Confluence, etc. | Markdown is the most portable intermediate format; converters exist for target formats |
-| **Cost** | Multiple LLM calls can become costly; balance cost with quality e.g. for evaluation | Use small LLMs for specific tasks; assess cost of different automatic evaluations |
-| **Context window size** | 1. Keep it small. 2. Do section-by-section generation | Context window size should not be bigger than needed to generate a document of 2–6 pages; hallucinations tend to increase with document length; section-by-section generation works better with explicit outline pass before generation actually takes place |
+| **Cost** | Balance cost with quality (e.g. for evaluation); limit LLM calls to reduce cost; use smaller LLMs for specific tasks | Major cost factor is calls to external sources (LLMs, etc.) |
+| **Context window size** | 1. Keep it small. 2. Do section-by-section generation | 1. Hallucinations increase with bigger context. 2. Review of whole result before generation is done |
 | <span style="background-color: #D3D3D3;">**Real-time sync**</span> | <span style="background-color: #D3D3D3;">No automatic re-ingestion when a ticket or code file changes</span> | <span style="background-color: #D3D3D3;">*Later*: manual re-index</span> |
 | <span style="background-color: #D3D3D3;">**Multilingual output**</span> | <span style="background-color: #D3D3D3;">Generation language follows the dominant language of sources</span> | <span style="background-color: #D3D3D3;">*Later*: explicit language override parameter planned</span> |
 | <span style="background-color: #D3D3D3;">**Access control**</span> | <span style="background-color: #D3D3D3;">No per-user permission model on source artifacts</span> | <span style="background-color: #D3D3D3;">*Later*: assumes operator controls which sources are connected</span> |
+
+### Detail on context window size
+
+- The context window should not need to be bigger than what is required to generate a document of 2–6 pages.
+  - It's not only about the window size — hallucinations tend to increase with document length.
+- We can limit the effective context size using section-by-section generation. Section-by-section generation tends to work better, ideally with an explicit **outline pass** before generation actually takes place. An outline pass means:
+  - The LLM is aware of the document structure (i.e. of "the document outline") prior to actually generating the contents; or
+  - It is about first generating the "outline" (the general structure/skeleton) of the document — similar to a table of contents — and then proceeding to fill the output sections in subsequent LLM calls, instead of requesting an LLM to produce the entire document in a single call.
 
 ---
 
@@ -296,60 +321,69 @@ We try also to answer these questions:
 
 The solution can only work if you have at least one input source with quality information. When using agile board items as the input data source:
 
-- **Data quality and structure**: On an agile board, the level of detail of information can strongly vary — from a one-liner backlog item up to a lot of detail almost at pseudo-code level. Therefore:
-  - use a template for user story, feature, etc. to make data extraction easier
-  - ensure the description is always detailed enough to use it in the documentation
+- **Data & quality**: On an agile board, the level of detail of information can strongly vary — from a one-liner backlog item up to a lot of detail almost at pseudo-code level. Therefore:
+  - we use a template for user story, feature, etc. to make data extraction easier
+  - we ensure the item description is detailed enough to use it in the documentation, e.g. by comparing the description against reference examples / a template
+  - how to identify all backlog items which are relevant for the functionality to document
 
-- **Feature identification**: How to identify all backlog items which are relevant for the functionality to document?
-  - Ensure all items are grouped together
+- **Feature definition**:
+  - We ensure all items are grouped together
 
 - **Documentation quality definition**: Further specify what is 'good' documentation, i.e. documentation which is really used/read.
-  - Get additional input through human review/acceptance
+  - Get additional input to assess this through human review/acceptance
 
 ---
 
-## 8. Next Steps / Iterations
+## 8. Biggest Challenges
 
-### 8.1 First Implementation Steps
+- Quality of the input data source(s)
+- Evaluation quality, to make the result 'useful'
+- Doing a cost-benefit analysis, to have a real, valid use case
+
+---
+
+## 9. ANNEX – Next Steps / Iterations
+
+### 9.1 First Implementation Steps
 
 **v0**
 
 - Implement a few steps first and use them to check for quality
 - Embed & store (chunking of information, embedding)
-- Evaluate
+- Automated evaluation of 1 metric
 
 **v1**
 
 - Start with one input source for which we expect to have rather high-quality input, i.e. agile backlog items (user stories, features)
-- For this input, create the data pipeline
-- Start with 1 or 2 automated evaluations
-- Add logging of cost to get a first idea which components will generate most cost
+- Add automated evaluation for 1 or 2 more metrics
 
-### 8.2 Incremental Improvements — Possible Next Iterations
+### 9.2 Incremental Improvements — Possible Next Iterations
 
 **v2**
 
-- Increase quality by adding more automated evaluations
-- Automatic incremental re-indexing triggered by webhook (Jira, GitHub events)
+- Add logging of cost, to get a first idea which components generate the highest cost
+- Add automated evaluation for 1 or 2 metrics, to further increase the quality of the output
 
 **v3**
 
-- Access control: per-user authentication and authorization
+- Move to a real-time model: automatically provide input data for automated output generation
 - More dynamic (UI, output API)
 
 **v4**
 
-- Explicit output language selection (e.g. always generate in English regardless of source language)
+- Access control: per-user authentication and authorization
+- Support output in multiple languages
 
 **v5**
 
-- At start it will be primarily a functional description for internal company usage
-- Extend audience (e.g. to external stakeholders, to documentation agents)
-- Use other document types, e.g. to make 'support' pages for end-users
+- Extend the audience of the output result (which may require extension of the pipeline):
+  - to end-users (e.g. 'support' pages)
+  - to documentation agents
+- Use other document types
 
 ---
 
 *This work is licensed under the Creative Commons Attribution 4.0 International License.*  
 *To view a copy of this license, visit [http://creativecommons.org/licenses/by/4.0/](http://creativecommons.org/licenses/by/4.0/)*
 
-**Document**: Functional_guide_generator System_design v9.md | **License**: CC BY 4.0 | **Date**: 2026-07-14
+**Document**: Functional_guide_generator System_design v10.md | **License**: CC BY 4.0 | **Date**: 2026-07-15

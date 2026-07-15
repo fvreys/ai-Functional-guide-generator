@@ -1,8 +1,4 @@
-# Functional Guide Generator — Architecture Diagram
-
----
-
-## System Architecture
+# Functional Guide Generator — Architecture
 
 ```mermaid
 flowchart LR
@@ -49,49 +45,3 @@ flowchart LR
   classDef amber fill:#FAEEDA,stroke:#BA7517,color:#633806
   classDef green fill:#EAF3DE,stroke:#639922,color:#27500A
 ```
-
----
-
-## Architecture Overview
-
-### Input Sources
-
-**Currently Active** (Blue):
-- **Features & user stories** — agile board items (Jira, Azure DevOps)
-
-**Future Input Sources** (Grey):
-- Requirements & specifications (Wiki, Confluence, Notion)
-- Application screenshots
-- Demo meeting notes & recordings
-- Code repository (GitHub)
-
-### Processing Layers
-
-**Layer 1 — Ingest & preprocess**
-- Ingest: Extract raw artifacts from source systems
-- Preprocess: Clean, chunk, and normalize text/images
-- Embed & store: Convert chunks to vectors and store in vector database
-
-**Layer 2 — Retrieve & generate**
-- Retrieve: Fetch relevant chunks from vector store via semantic search
-- Generate: Use LLM to synthesize context into functional documentation
-
-**Layer 3 — Evaluate & serve**
-- Evaluate: Score quality using multiple criteria (completeness, precision, recall)
-- Serve: Return assembled documentation to user
-
-### Output Formats
-
-**Default Output**:
-- Markdown
-
-**Post-processing to**:
-- Word document
-- PDF
-- HTML
-- Wiki page
-
----
-
-*This architecture diagram is part of the Functional Guide Generator System Design.*  
-*Licensed under CC BY 4.0 — [http://creativecommons.org/licenses/by/4.0/](http://creativecommons.org/licenses/by/4.0/)*
