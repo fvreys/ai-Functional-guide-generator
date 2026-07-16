@@ -20,9 +20,10 @@ ai-eng-project-template/
 ├── .env.example                 # Environment variables template
 ├── docs/
 │   ├── ARCHITECTURE.md          # Architecture write-up template
-│   ├── license.md               # License
+│   ├── Functional_Guide_Generator_System_Design.pptx    # Presentation of System design
+│   ├── LICENSE.md               # License
 │   ├── SUBMISSION_CHECKLIST.md  # Checklist to run through before submitting
-│   └── SUBMISSION_CHECKLIST.md  # System design
+│   └── System_design.md         # System design
 ├── src/
 │   └── app/
 │       ├── __init__.py
