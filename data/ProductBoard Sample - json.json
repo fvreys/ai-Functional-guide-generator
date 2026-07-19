@@ -1,0 +1,855 @@
+[
+  {
+    "Key": "PROD-1",
+    "Summary": "User Authentication System",
+    "Description": "Implement a comprehensive authentication system for user registration, login, and account management.",
+    "Type": "Epic",
+    "EpicLink": null,
+    "EpicName": null,
+    "Features": [
+      {
+        "Key": "FEAT-1",
+        "Summary": "User Authentication",
+        "Description": "Implement email and password based user registration and login.",
+        "AcceptanceCriteria": ["All user stories in this feature must pass security review", "Login must work across all supported browsers"],
+        "UserStories": [
+          {
+            "Key": "PROD-5",
+            "Summary": "As a user, I want to register with email so I can create an account",
+            "Description": "User can register using email and password with validation.",
+            "Status": "Done",
+            "Priority": "High",
+            "StoryPoints": 5,
+            "Assignee": "john.doe@company.com",
+            "Sprint": "Sprint 1",
+            "Labels": ["authentication", "frontend", "registration"],
+            "AcceptanceCriteria": [
+              "Registration form with email, password, confirm password",
+              "Email validation (format, uniqueness)",
+              "Password strength requirements (8+ chars, special char)",
+              "Welcome email sent after registration",
+              "Registration must trigger onboarding flow"
+            ],
+            "RelatedStories": ["PROD-6", "PROD-7"],
+            "Created": "2026-01-02",
+            "Updated": "2026-01-05",
+            "DueDate": "2026-01-10"
+          },
+          {
+            "Key": "PROD-6",
+            "Summary": "As a user, I want to log in with Google OAuth so I can access quickly",
+            "Description": "Implement Google OAuth 2.0 authentication flow.",
+            "Status": "Done",
+            "Priority": "High",
+            "StoryPoints": 3,
+            "Assignee": "jane.smith@company.com",
+            "Sprint": "Sprint 1",
+            "Labels": ["authentication", "security", "oauth"],
+            "AcceptanceCriteria": [
+              "Google Sign-In button on login page",
+              "Redirect to Google authentication",
+              "Create or link user account on successful auth",
+              "Error handling for denied permissions",
+              "Social login must work with existing accounts"
+            ],
+            "RelatedStories": ["PROD-5", "PROD-7"],
+            "Created": "2026-01-02",
+            "Updated": "2026-01-04",
+            "DueDate": "2026-01-08"
+          },
+          {
+            "Key": "PROD-7",
+            "Summary": "As a user, I want to reset my password so I can regain access",
+            "Description": "Implement password reset functionality with email verification.",
+            "Status": "Done",
+            "Priority": "Medium",
+            "StoryPoints": 8,
+            "Assignee": "john.doe@company.com",
+            "Sprint": "Sprint 2",
+            "Labels": ["authentication", "security"],
+            "AcceptanceCriteria": [
+              "Forgot password link on login page",
+              "Email input form with validation",
+              "Password reset email with secure link (expires in 24h)",
+              "New password form with strength validation",
+              "Confirmation email after reset",
+              "Password reset must invalidate all existing sessions"
+            ],
+            "RelatedStories": ["PROD-5"],
+            "Created": "2026-01-08",
+            "Updated": "2026-01-12",
+            "DueDate": "2026-01-15"
+          }
+        ]
+      },
+      {
+        "Key": "FEAT-2",
+        "Summary": "Social Login",
+        "Description": "Implement OAuth 2.0 authentication with Google and other providers.",
+        "AcceptanceCriteria": ["Social login must integrate seamlessly with existing auth system", "User profiles must merge correctly"],
+        "UserStories": []
+      },
+      {
+        "Key": "FEAT-3",
+        "Summary": "Password Management",
+        "Description": "Implement password reset and account recovery flows.",
+        "AcceptanceCriteria": ["Password reset links must expire after 24 hours", "Users must receive confirmation emails"],
+        "UserStories": []
+      }
+    ]
+  },
+  {
+    "Key": "PROD-2",
+    "Summary": "Product Catalog Redesign",
+    "Description": "Redesign the product catalog with improved filtering, sorting, and search capabilities.",
+    "Type": "Epic",
+    "EpicLink": null,
+    "EpicName": null,
+    "Features": [
+      {
+        "Key": "FEAT-4",
+        "Summary": "Category Browsing",
+        "Description": "Implement hierarchical category navigation for products.",
+        "AcceptanceCriteria": ["Category hierarchy must support unlimited nesting", "Category changes must not break existing URLs"],
+        "UserStories": [
+          {
+            "Key": "PROD-8",
+            "Summary": "As a shopper, I want to browse products by category so I can find items easily",
+            "Description": "Implement category-based product browsing with nested categories.",
+            "Status": "In Progress",
+            "Priority": "High",
+            "StoryPoints": 13,
+            "Assignee": "mike.wilson@company.com",
+            "Sprint": "Sprint 3",
+            "Labels": ["catalog", "frontend", "ui", "filtering"],
+            "AcceptanceCriteria": [
+              "Category sidebar with expandable hierarchy",
+              "Product grid updates when category selected",
+              "Breadcrumbs show current category path",
+              "URL updates to reflect selected category",
+              "Mobile-responsive category navigation",
+              "Category selection must persist across sessions"
+            ],
+            "RelatedStories": ["PROD-9", "PROD-10", "PROD-13"],
+            "Created": "2026-02-01",
+            "Updated": "2026-02-08",
+            "DueDate": "2026-02-20"
+          }
+        ]
+      },
+      {
+        "Key": "FEAT-5",
+        "Summary": "Product Filtering",
+        "Description": "Implement price range, rating, and attribute-based filtering.",
+        "AcceptanceCriteria": ["Filters must work in combination", "Filter state must persist across navigation"],
+        "UserStories": [
+          {
+            "Key": "PROD-9",
+            "Summary": "As a shopper, I want to filter products by price range so I can stay within budget",
+            "Description": "Add price range slider and min/max input fields for filtering.",
+            "Status": "To Do",
+            "Priority": "Medium",
+            "StoryPoints": 8,
+            "Assignee": "sarah.johnson@company.com",
+            "Sprint": "Sprint 4",
+            "Labels": ["catalog", "filtering", "frontend"],
+            "AcceptanceCriteria": [
+              "Price range slider with min/max values",
+              "Input fields for exact min/max prices",
+              "Real-time product count update as range changes",
+              "Filter persists across page navigation",
+              "Mobile-friendly price filter interface",
+              "Price filter must work with category filter"
+            ],
+            "RelatedStories": ["PROD-8", "PROD-10", "PROD-13"],
+            "Created": "2026-02-05",
+            "Updated": "2026-02-06",
+            "DueDate": "2026-02-25"
+          },
+          {
+            "Key": "PROD-13",
+            "Summary": "As a shopper, I want to sort products by price, rating, and popularity",
+            "Description": "Add sorting options to product listing pages.",
+            "Status": "To Do",
+            "Priority": "Medium",
+            "StoryPoints": 3,
+            "Assignee": "mike.wilson@company.com",
+            "Sprint": "Sprint 5",
+            "Labels": ["catalog", "sorting", "frontend"],
+            "AcceptanceCriteria": [
+              "Dropdown with sorting options",
+              "URL updates to reflect sort order",
+              "Sort persists across navigation",
+              "Default sort is Best Match",
+              "Sorting must work with filters",
+              "Sort order must be remembered per user"
+            ],
+            "RelatedStories": ["PROD-8", "PROD-9"],
+            "Created": "2026-02-15",
+            "Updated": "2026-02-15",
+            "DueDate": "2026-02-28"
+          }
+        ]
+      },
+      {
+        "Key": "FEAT-6",
+        "Summary": "Product Search",
+        "Description": "Implement full-text search with autocomplete and suggestions.",
+        "AcceptanceCriteria": ["Search must return relevant results within 500ms", "Search suggestions must update in real-time"],
+        "UserStories": [
+          {
+            "Key": "PROD-10",
+            "Summary": "As a shopper, I want to search for products so I can find specific items",
+            "Description": "Implement full-text search with autocomplete and suggestions.",
+            "Status": "To Do",
+            "Priority": "Medium",
+            "StoryPoints": 5,
+            "Assignee": "mike.wilson@company.com",
+            "Sprint": "Sprint 4",
+            "Labels": ["catalog", "search", "frontend"],
+            "AcceptanceCriteria": [
+              "Search bar with autocomplete dropdown",
+              "Search results page with relevance sorting",
+              "Search suggestions based on popular queries",
+              "Search within categories option",
+              "Handle typos with fuzzy matching",
+              "Search must be case-insensitive"
+            ],
+            "RelatedStories": ["PROD-8", "PROD-9"],
+            "Created": "2026-02-05",
+            "Updated": "2026-02-06",
+            "DueDate": "2026-02-22"
+          }
+        ]
+      },
+      {
+        "Key": "FEAT-7",
+        "Summary": "Order History",
+        "Description": "Display user's past orders with status, date, and total amount.",
+        "AcceptanceCriteria": ["Order history must be accessible from user profile", "Orders must be filterable by date range"],
+        "UserStories": [
+          {
+            "Key": "PROD-11",
+            "Summary": "As a user, I want to view my order history so I can track my purchases",
+            "Description": "Display user's past orders with status, date, and total amount.",
+            "Status": "Backlog",
+            "Priority": "Low",
+            "StoryPoints": 3,
+            "Assignee": "sarah.johnson@company.com",
+            "Sprint": null,
+            "Labels": ["orders", "frontend", "ui"],
+            "AcceptanceCriteria": [
+              "Order history page accessible from user profile",
+              "List of orders with date, status, total",
+              "Click to view order details",
+              "Filter by date range",
+              "Export order history as PDF",
+              "Order status must update in real-time"
+            ],
+            "RelatedStories": null,
+            "Created": "2026-02-10",
+            "Updated": "2026-02-10",
+            "DueDate": "2026-03-01"
+          }
+        ]
+      },
+      {
+        "Key": "FEAT-8",
+        "Summary": "Wishlist",
+        "Description": "Implement wishlist functionality for saving products for later.",
+        "AcceptanceCriteria": ["Wishlist must persist across sessions", "Wishlist items must be shareable via email"],
+        "UserStories": [
+          {
+            "Key": "PROD-12",
+            "Summary": "As a user, I want to add items to a wishlist so I can save items for later",
+            "Description": "Implement wishlist functionality for saving products.",
+            "Status": "Backlog",
+            "Priority": "Low",
+            "StoryPoints": 5,
+            "Assignee": "jane.smith@company.com",
+            "Sprint": null,
+            "Labels": ["wishlist", "frontend", "ui"],
+            "AcceptanceCriteria": [
+              "Wishlist button on product detail page",
+              "Wishlist page showing saved items",
+              "Add/remove items from wishlist",
+              "Move wishlist items to cart",
+              "Share wishlist via email",
+              "Wishlist must sync across devices"
+            ],
+            "RelatedStories": ["PROD-8"],
+            "Created": "2026-02-10",
+            "Updated": "2026-02-10",
+            "DueDate": "2026-03-05"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Key": "PROD-3",
+    "Summary": "Payment Gateway Integration",
+    "Description": "Integrate multiple payment gateways (Stripe, PayPal, credit cards) with fraud detection.",
+    "Type": "Epic",
+    "EpicLink": null,
+    "EpicName": null,
+    "Features": [
+      {
+        "Key": "FEAT-9",
+        "Summary": "Stripe Integration",
+        "Description": "Implement Stripe payment processing with webhooks for event handling.",
+        "AcceptanceCriteria": ["Stripe payments must be PCI compliant", "Webhooks must handle all payment events"],
+        "UserStories": [
+          {
+            "Key": "PROD-14",
+            "Summary": "As a user, I want to integrate with Stripe payment gateway",
+            "Description": "Implement Stripe payment processing with webhooks for event handling.",
+            "Status": "To Do",
+            "Priority": "High",
+            "StoryPoints": 8,
+            "Assignee": "sarah.johnson@company.com",
+            "Sprint": "Sprint 4",
+            "Labels": ["payment", "stripe", "backend", "integration"],
+            "AcceptanceCriteria": [
+              "Stripe API integration for credit card payments",
+              "Payment form with card details input",
+              "Webhook handlers for payment events",
+              "Transaction logging and error handling",
+              "PCI compliance implementation",
+              "Stripe must support 3D Secure authentication"
+            ],
+            "RelatedStories": ["PROD-15", "PROD-16"],
+            "Created": "2026-03-01",
+            "Updated": "2026-03-02",
+            "DueDate": "2026-03-15"
+          }
+        ]
+      },
+      {
+        "Key": "FEAT-10",
+        "Summary": "PayPal Integration",
+        "Description": "Implement PayPal payment processing with IPN for notifications.",
+        "AcceptanceCriteria": ["PayPal integration must support both redirect and embedded flows", "IPN must update transaction status"],
+        "UserStories": [
+          {
+            "Key": "PROD-15",
+            "Summary": "As a user, I want to integrate with PayPal payment gateway",
+            "Description": "Implement PayPal payment processing with IPN for notifications.",
+            "Status": "To Do",
+            "Priority": "High",
+            "StoryPoints": 5,
+            "Assignee": "sarah.johnson@company.com",
+            "Sprint": "Sprint 4",
+            "Labels": ["payment", "paypal", "backend", "integration"],
+            "AcceptanceCriteria": [
+              "PayPal API integration",
+              "Redirect to PayPal for payment authorization",
+              "IPN handler",
+              "Transaction status updates",
+              "Refund processing capability",
+              "PayPal must support recurring payments"
+            ],
+            "RelatedStories": ["PROD-14", "PROD-16"],
+            "Created": "2026-03-01",
+            "Updated": "2026-03-03",
+            "DueDate": "2026-03-20"
+          }
+        ]
+      },
+      {
+        "Key": "FEAT-11",
+        "Summary": "Payment Methods",
+        "Description": "Allow users to store and manage multiple payment methods.",
+        "AcceptanceCriteria": ["Payment methods must be securely stored using tokenization", "Users must be able to set a default payment method"],
+        "UserStories": [
+          {
+            "Key": "PROD-16",
+            "Summary": "As a user, I want to save multiple payment methods for future use",
+            "Description": "Allow users to store and manage multiple payment methods.",
+            "Status": "To Do",
+            "Priority": "Medium",
+            "StoryPoints": 5,
+            "Assignee": "john.doe@company.com",
+            "Sprint": "Sprint 5",
+            "Labels": ["payment", "frontend", "backend"],
+            "AcceptanceCriteria": [
+              "Payment methods management page",
+              "Add new payment method form",
+              "Set default payment method",
+              "Delete payment methods",
+              "Secure storage of payment details (tokenization)",
+              "Payment methods must be encrypted at rest"
+            ],
+            "RelatedStories": ["PROD-14", "PROD-15"],
+            "Created": "2026-03-05",
+            "Updated": "2026-03-06",
+            "DueDate": "2026-03-25"
+          }
+        ]
+      },
+      {
+        "Key": "FEAT-12",
+        "Summary": "Fraud Detection",
+        "Description": "Add fraud detection rules and monitoring.",
+        "AcceptanceCriteria": ["Fraud detection must flag suspicious transactions", "Manual review queue must be implemented"],
+        "UserStories": [
+          {
+            "Key": "PROD-17",
+            "Summary": "As a user, I want to implement fraud detection for payments",
+            "Description": "Add fraud detection rules and monitoring.",
+            "Status": "Backlog",
+            "Priority": "Medium",
+            "StoryPoints": 13,
+            "Assignee": "jane.smith@company.com",
+            "Sprint": null,
+            "Labels": ["payment", "security", "backend"],
+            "AcceptanceCriteria": [
+              "Fraud detection rules based on transaction patterns",
+              "IP address and geolocation checks",
+              "Velocity checks",
+              "Manual review queue",
+              "Alert notifications for fraud team",
+              "Fraud detection must integrate with payment gateways"
+            ],
+            "RelatedStories": ["PROD-14", "PROD-15", "PROD-16"],
+            "Created": "2026-03-10",
+            "Updated": "2026-03-10",
+            "DueDate": "2026-04-10"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Key": "PROD-4",
+    "Summary": "Mobile App Performance",
+    "Description": "Optimize mobile app performance for iOS and Android platforms.",
+    "Type": "Epic",
+    "EpicLink": null,
+    "EpicName": null,
+    "Features": [
+      {
+        "Key": "FEAT-13",
+        "Summary": "Startup Optimization",
+        "Description": "Reduce app startup time from 3.2s to under 1.5s.",
+        "AcceptanceCriteria": ["Startup time must be under 1.5s on mid-range devices", "Performance must be measured and monitored"],
+        "UserStories": [
+          {
+            "Key": "PROD-18",
+            "Summary": "As a user, I want to optimize mobile app startup time",
+            "Description": "Reduce app startup time from 3.2s to under 1.5s.",
+            "Status": "To Do",
+            "Priority": "High",
+            "StoryPoints": 8,
+            "Assignee": "jane.smith@company.com",
+            "Sprint": "Sprint 5",
+            "Labels": ["mobile", "performance", "frontend"],
+            "AcceptanceCriteria": [
+              "Analyze current startup performance bottlenecks",
+              "Implement lazy loading",
+              "Optimize image and asset loading",
+              "Reduce initial bundle size",
+              "Startup time under 1.5s on mid-range devices",
+              "Startup performance must be monitored in production"
+            ],
+            "RelatedStories": ["PROD-19", "PROD-20", "PROD-21"],
+            "Created": "2026-05-01",
+            "Updated": "2026-05-02",
+            "DueDate": "2026-05-20"
+          }
+        ]
+      },
+      {
+        "Key": "FEAT-14",
+        "Summary": "Offline Support",
+        "Description": "Implement offline-first architecture with data caching.",
+        "AcceptanceCriteria": ["App must work offline with cached data", "Changes must sync automatically when network reconnects"],
+        "UserStories": [
+          {
+            "Key": "PROD-19",
+            "Summary": "As a user, I want to improve app responsiveness on slow networks",
+            "Description": "Implement offline-first architecture with data caching.",
+            "Status": "To Do",
+            "Priority": "High",
+            "StoryPoints": 13,
+            "Assignee": "john.doe@company.com",
+            "Sprint": "Sprint 5",
+            "Labels": ["mobile", "performance", "offline"],
+            "AcceptanceCriteria": [
+              "Offline data caching for products and user data",
+              "Background sync when network reconnects",
+              "Offline mode UI indicators",
+              "Cache invalidation strategy",
+              "Conflict resolution for offline changes",
+              "Offline data must be encrypted"
+            ],
+            "RelatedStories": ["PROD-18", "PROD-20", "PROD-21"],
+            "Created": "2026-05-01",
+            "Updated": "2026-05-03",
+            "DueDate": "2026-05-25"
+          }
+        ]
+      },
+      {
+        "Key": "FEAT-15",
+        "Summary": "Memory Management",
+        "Description": "Optimize memory consumption to prevent crashes on low-memory devices.",
+        "AcceptanceCriteria": ["Memory usage must stay below 200MB", "Memory leaks must be eliminated"],
+        "UserStories": [
+          {
+            "Key": "PROD-20",
+            "Summary": "As a user, I want to reduce app memory usage",
+            "Description": "Optimize memory consumption to prevent crashes on low-memory devices.",
+            "Status": "Backlog",
+            "Priority": "Medium",
+            "StoryPoints": 5,
+            "Assignee": "mike.wilson@company.com",
+            "Sprint": null,
+            "Labels": ["mobile", "performance", "backend"],
+            "AcceptanceCriteria": [
+              "Memory usage profiling and analysis",
+              "Image and resource cleanup",
+              "Implement memory-efficient data structures",
+              "Reduce memory leaks",
+              "Memory usage stays below 200MB",
+              "Memory usage must be logged and alerted on"
+            ],
+            "RelatedStories": ["PROD-18", "PROD-19"],
+            "Created": "2026-05-05",
+            "Updated": "2026-05-05",
+            "DueDate": "2026-05-30"
+          }
+        ]
+      },
+      {
+        "Key": "FEAT-16",
+        "Summary": "Battery Optimization",
+        "Description": "Reduce battery consumption during app usage.",
+        "AcceptanceCriteria": ["Battery usage must be comparable to similar apps", "Background tasks must be optimized"],
+        "UserStories": [
+          {
+            "Key": "PROD-21",
+            "Summary": "As a user, I want to improve app battery usage",
+            "Description": "Reduce battery consumption during app usage.",
+            "Status": "Backlog",
+            "Priority": "Low",
+            "StoryPoints": 3,
+            "Assignee": "sarah.johnson@company.com",
+            "Sprint": null,
+            "Labels": ["mobile", "performance"],
+            "AcceptanceCriteria": [
+              "Identify battery-draining operations",
+              "Optimize background tasks",
+              "Reduce GPS and sensor usage",
+              "Implement efficient polling intervals",
+              "Battery usage comparable to similar apps",
+              "Battery optimization must not impact functionality"
+            ],
+            "RelatedStories": ["PROD-18", "PROD-19"],
+            "Created": "2026-05-05",
+            "Updated": "2026-05-05",
+            "DueDate": "2026-06-01"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Key": "BUG-15",
+    "Summary": "Login fails on mobile Safari",
+    "Description": "Users cannot log in when using Safari browser on iOS devices.",
+    "Type": "Bug",
+    "EpicLink": "PROD-1",
+    "EpicName": "User Authentication System",
+    "FeatureLink": null,
+    "FeatureName": null,
+    "Status": "In Progress",
+    "Priority": "High",
+    "Severity": "Critical",
+    "Assignee": "jane.smith@company.com",
+    "Sprint": "Sprint 2",
+    "Environment": "iOS Safari",
+    "AffectedVersion": "1.0.0",
+    "StepsToReproduce": [
+      "Open app on iPhone with Safari",
+      "Tap Login button",
+      "Enter valid credentials",
+      "Tap Submit",
+      "Login fails with no error message"
+    ],
+    "RelatedStories": ["PROD-5", "PROD-6"],
+    "Created": "2026-01-08",
+    "Updated": "2026-01-15",
+    "DueDate": "2026-01-20"
+  },
+  {
+    "Key": "BUG-16",
+    "Summary": "Product images not loading on Android",
+    "Description": "Product images fail to load on Android Chrome browser.",
+    "Type": "Bug",
+    "EpicLink": "PROD-2",
+    "EpicName": "Product Catalog Redesign",
+    "FeatureLink": null,
+    "FeatureName": null,
+    "Status": "To Do",
+    "Priority": "Medium",
+    "Severity": "Major",
+    "Assignee": "mike.wilson@company.com",
+    "Sprint": "Sprint 3",
+    "Environment": "Android Chrome",
+    "AffectedVersion": "1.2.0",
+    "StepsToReproduce": [
+      "Open app on Android phone",
+      "Navigate to product catalog",
+      "Scroll through products",
+      "Images appear as broken icons"
+    ],
+    "RelatedStories": ["PROD-8", "PROD-9", "PROD-10"],
+    "Created": "2026-02-10",
+    "Updated": "2026-02-10",
+    "DueDate": "2026-02-25"
+  },
+  {
+    "Key": "BUG-17",
+    "Summary": "Password reset email not sent",
+    "Description": "Password reset emails are not being delivered to users.",
+    "Type": "Bug",
+    "EpicLink": "PROD-1",
+    "EpicName": "User Authentication System",
+    "FeatureLink": null,
+    "FeatureName": null,
+    "Status": "Done",
+    "Priority": "High",
+    "Severity": "Critical",
+    "Assignee": "john.doe@company.com",
+    "Sprint": "Sprint 1",
+    "Environment": "All",
+    "AffectedVersion": "1.0.0",
+    "StepsToReproduce": [
+      "Click Forgot password on login page",
+      "Enter registered email address",
+      "Click Send reset link",
+      "No email is received"
+    ],
+    "RelatedStories": ["PROD-7"],
+    "Created": "2026-01-05",
+    "Updated": "2026-01-06",
+    "DueDate": "2026-01-10"
+  },
+  {
+    "Key": "BUG-36",
+    "Summary": "Search returns no results for valid queries",
+    "Description": "Product search is not returning any results even for existing products.",
+    "Type": "Bug",
+    "EpicLink": "PROD-2",
+    "EpicName": "Product Catalog Redesign",
+    "FeatureLink": null,
+    "FeatureName": null,
+    "Status": "To Do",
+    "Priority": "High",
+    "Severity": "Critical",
+    "Assignee": "sarah.johnson@company.com",
+    "Sprint": "Sprint 4",
+    "Environment": "All",
+    "AffectedVersion": "1.2.0",
+    "StepsToReproduce": [
+      "Open product catalog",
+      "Type product name in search bar",
+      "Press Enter",
+      "No results displayed"
+    ],
+    "RelatedStories": ["PROD-10"],
+    "Created": "2026-02-15",
+    "Updated": "2026-02-15",
+    "DueDate": "2026-02-20"
+  },
+  {
+    "Key": "BUG-37",
+    "Summary": "Payment fails with Stripe test card",
+    "Description": "Stripe payment processing fails with test card 4242 4242 4242 4242.",
+    "Type": "Bug",
+    "EpicLink": "PROD-3",
+    "EpicName": "Payment Gateway Integration",
+    "FeatureLink": null,
+    "FeatureName": null,
+    "Status": "Backlog",
+    "Priority": "High",
+    "Severity": "Critical",
+    "Assignee": "sarah.johnson@company.com",
+    "Sprint": null,
+    "Environment": "All",
+    "AffectedVersion": "1.0.0",
+    "StepsToReproduce": [
+      "Add item to cart",
+      "Proceed to checkout",
+      "Select Stripe payment",
+      "Enter test card: 4242 4242 4242 4242, any future date, any CVC",
+      "Click Pay",
+      "Payment fails with error code"
+    ],
+    "RelatedStories": ["PROD-14"],
+    "Created": "2026-03-10",
+    "Updated": "2026-03-10",
+    "DueDate": "2026-03-15"
+  },
+  {
+    "Key": "BUG-38",
+    "Summary": "App crashes on Android when opening product detail",
+    "Description": "App crashes when user taps on a product to view details on Android.",
+    "Type": "Bug",
+    "EpicLink": "PROD-2",
+    "EpicName": "Product Catalog Redesign",
+    "FeatureLink": null,
+    "FeatureName": null,
+    "Status": "To Do",
+    "Priority": "High",
+    "Severity": "Critical",
+    "Assignee": "mike.wilson@company.com",
+    "Sprint": "Sprint 3",
+    "Environment": "Android",
+    "AffectedVersion": "1.2.0",
+    "StepsToReproduce": [
+      "Open app on Android device",
+      "Navigate to product catalog",
+      "Tap on any product",
+      "App crashes immediately"
+    ],
+    "RelatedStories": ["PROD-8"],
+    "Created": "2026-02-12",
+    "Updated": "2026-02-12",
+    "DueDate": "2026-02-20"
+  },
+  {
+    "Key": "BUG-39",
+    "Summary": "Wishlist items not persisting after refresh",
+    "Description": "Items added to wishlist disappear when user refreshes the page.",
+    "Type": "Bug",
+    "EpicLink": "PROD-2",
+    "EpicName": "Product Catalog Redesign",
+    "FeatureLink": null,
+    "FeatureName": null,
+    "Status": "Backlog",
+    "Priority": "Medium",
+    "Severity": "Minor",
+    "Assignee": "jane.smith@company.com",
+    "Sprint": null,
+    "Environment": "All",
+    "AffectedVersion": "1.2.0",
+    "StepsToReproduce": [
+      "Add product to wishlist",
+      "Refresh the page",
+      "Wishlist is empty"
+    ],
+    "RelatedStories": ["PROD-12"],
+    "Created": "2026-02-15",
+    "Updated": "2026-02-15",
+    "DueDate": "2026-03-01"
+  },
+  {
+    "Key": "BUG-40",
+    "Summary": "Password strength validation too strict",
+    "Description": "Password validation rejects valid strong passwords.",
+    "Type": "Bug",
+    "EpicLink": "PROD-1",
+    "EpicName": "User Authentication System",
+    "FeatureLink": null,
+    "FeatureName": null,
+    "Status": "Backlog",
+    "Priority": "Low",
+    "Severity": "Minor",
+    "Assignee": "john.doe@company.com",
+    "Sprint": null,
+    "Environment": "All",
+    "AffectedVersion": "1.0.0",
+    "StepsToReproduce": [
+      "Try to register with password: MyStr0ng!Pass",
+      "Click Register",
+      "Error: Password must contain at least one number (but it does)"
+    ],
+    "RelatedStories": ["PROD-5"],
+    "Created": "2026-01-12",
+    "Updated": "2026-01-12",
+    "DueDate": "2026-01-20"
+  },
+  {
+    "Key": "BUG-41",
+    "Summary": "Category filter not working on mobile",
+    "Description": "Category filtering does not work properly on mobile devices.",
+    "Type": "Bug",
+    "EpicLink": "PROD-2",
+    "EpicName": "Product Catalog Redesign",
+    "FeatureLink": null,
+    "FeatureName": null,
+    "Status": "Backlog",
+    "Priority": "Medium",
+    "Severity": "Major",
+    "Assignee": "mike.wilson@company.com",
+    "Sprint": null,
+    "Environment": "iOS",
+    "AffectedVersion": "1.2.0",
+    "StepsToReproduce": [
+      "Open app on iPhone",
+      "Navigate to product catalog",
+      "Tap category filter",
+      "Select a category",
+      "Products from other categories still appear"
+    ],
+    "RelatedStories": ["PROD-8", "PROD-9"],
+    "Created": "2026-02-20",
+    "Updated": "2026-02-20",
+    "DueDate": "2026-03-01"
+  },
+  {
+    "Key": "BUG-42",
+    "Summary": "Payment method deletion fails",
+    "Description": "Users cannot delete saved payment methods from their account.",
+    "Type": "Bug",
+    "EpicLink": "PROD-3",
+    "EpicName": "Payment Gateway Integration",
+    "FeatureLink": null,
+    "FeatureName": null,
+    "Status": "Backlog",
+    "Priority": "Low",
+    "Severity": "Minor",
+    "Assignee": "sarah.johnson@company.com",
+    "Sprint": null,
+    "Environment": "All",
+    "AffectedVersion": "1.0.0",
+    "StepsToReproduce": [
+      "Go to Payment Methods page",
+      "Click delete icon next to a payment method",
+      "Confirm deletion",
+      "Payment method still appears in list"
+    ],
+    "RelatedStories": ["PROD-16"],
+    "Created": "2026-03-15",
+    "Updated": "2026-03-15",
+    "DueDate": "2026-03-25"
+  },
+  {
+    "Key": "BUG-43",
+    "Summary": "App slow to load on iOS 14",
+    "Description": "App takes 5+ seconds to load on iOS 14 devices.",
+    "Type": "Bug",
+    "EpicLink": "PROD-4",
+    "EpicName": "Mobile App Performance",
+    "FeatureLink": null,
+    "FeatureName": null,
+    "Status": "Backlog",
+    "Priority": "Medium",
+    "Severity": "Major",
+    "Assignee": "jane.smith@company.com",
+    "Sprint": null,
+    "Environment": "iOS 14",
+    "AffectedVersion": "1.0.0",
+    "StepsToReproduce": [
+      "Open app on iPhone with iOS 14",
+      "Measure load time",
+      "App takes 5+ seconds to become interactive"
+    ],
+    "RelatedStories": ["PROD-18", "PROD-19"],
+    "Created": "2026-05-10",
+    "Updated": "2026-05-10",
+    "DueDate": "2026-05-30"
+  }
+]

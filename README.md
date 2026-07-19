@@ -1,12 +1,12 @@
-# AI Engineering Graduation Project Template
+# AI Engineering Graduation Project - Functional Guide Generator
 
-A starter kit repository for the AI Engineering course's graduation project. Use this repository as a template and build your solution on top of the provided structure. This `README.md` should be modified with the information specific to your application.
+A starter kit repository for the AI Engineering course's graduation project. Use this repository as a template and build your solution on top of the provided structure.
 
-You should focus on the "Setup Instructions" section to guarantee that following the instructions from start to finish will allow the application to properly initialize and be ready for use. (Try cloning the repository a few times and go through everything line by line before submitting the final solution). The final solution should be present in the `main` branch only, as other branches will not be reviewed during evaluation.
+You should focus on the "Setup Instructions" section to guarantee that following the instructions from start to finish will allow the application to properly initialize and be ready for use. (Try cloning the repository a few times and go through everything line by line before submitting the final solution). If you implement it, the final solution should be present in the `main` branch only, as other branches will not be reviewed during evaluation.
 
 We strongly recommend using Docker Compose during development (`docker-compose.yml` in this repository is the development version with hot reload for the FastAPI server), and for submitting the solution. If you are also developing a full frontend (e.g., using React), connect both components using Docker Compose.
 
-Initial repository structure:
+Repository structure:
 ```
 ai-eng-project-template/
 ├── README.md                    # Main documentation
@@ -31,11 +31,11 @@ ai-eng-project-template/
 │       ├── main.py              # FastAPI app entry point
 │       ├── schemas/             # Pydantic models
 │       └── services/            # Business logic
-└── data/                        # Sample data
+└── data/                        # Sample data - contains also test data sets
 ```
 
 # Design for a functional guide generator
-This design contains:
+This design is rather functional and contains:
 1. System design
 2. Architecture
 
@@ -47,18 +47,34 @@ Writing functional documentation after the implementation of a software feature 
 ## 1.2 Solution
 
 The Functional Guide Generator aims to generate structured, meaningful, and readable functional documentation based on available information sources, written for persons (not for documentation agents).
+We create a high-level overview of the software in max. 2-7 pages, covering how the application works and what its functionality is.
 
 ## 1.3 Restrictions
 
 - No new information is created. The system assembles and rephrases what is already known and documented.
 - Information will not be updated in real time, nor will we have automated interfaces for input of information.
 - Documentation is only in English.
-- We exclude creation of technical documentation.
+- Documentation has only functional scope. We exclude creation of technical documentation.
 
 
 ## 1.4 Prerequisite for implementation
 
 > Minimal one of the input data streams should contain enough quality information to avoid creating a 'garbage in, garbage out' solution.
 
-#  Other documents
-The implementation related files (code, env,..) have not been updated.
+
+#  Technical specifications
+During previous phase we narrowed down what we plan to do.
+During this phase we use this smaller scope, and provide already some technical info.
+We document this in:
+ - ?? Technical design
+
+## Test data
+It is a challenge to find agile board data for testing.
+So we generated ourselves two test data sets of agile board items (epics, features, user stories,..), both under the folder \data:
+ - ecommerce agile backlog
+ - ProductBoard - sample
+
+
+#  Implementation 
+We did not implement the solution.
+The implementation related files (code, env, Docker, extensions,..) have not been updated.
