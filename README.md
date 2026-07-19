@@ -1,6 +1,6 @@
 
 # Design for a Functional Guide Generator
-This design is rather functional and contains:
+This design is rather functional and contains under \docs:
 1. System design
 2. Architecture
 
